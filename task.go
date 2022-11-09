@@ -1,10 +1,12 @@
 package todoist
 
-import "net/http"
+import (
+	"net/http"
+	"strconv"
+)
 import "encoding/json"
 import "fmt"
 import "bytes"
-import "strconv"
 
 const TasksUrl = DefaultRestUrl + "/tasks"
 
@@ -69,17 +71,16 @@ type jCompletedTask struct {
 	Content       string `json:"content"`
 	MetaData      string `json:"meta_data"`
 	UserId        int    `json:"user_id"`
-	TaskId        int    `json:"task_id"`
-	ProjectId     int    `json:"project_id"`
+	TaskId        string `json:"task_id"`
+	ProjectId     string `json:"project_id"`
 	CompletedDate string `json:"completed_date"`
-	Id            int    `json:"id"`
+	Id            string `json:"id"`
 }
 
 type CompletedTaskResponse struct {
 	Items []CompletedTask `json:"items"`
 }
 
-// We want to work with the Id as a string
 func (t *Task) UnmarshalJSON(b []byte) error {
 	var jt jTask
 
@@ -105,7 +106,6 @@ func (t *Task) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// We want to work with the Id as a string
 func (ct *CompletedTask) UnmarshalJSON(b []byte) error {
 	var jct jCompletedTask
 
@@ -118,10 +118,10 @@ func (ct *CompletedTask) UnmarshalJSON(b []byte) error {
 	ct.Content = jct.Content
 	ct.MetaData = jct.MetaData
 	ct.UserId = strconv.Itoa(jct.UserId)
-	ct.TaskId = strconv.Itoa(jct.TaskId)
-	ct.ProjectId = strconv.Itoa(jct.ProjectId)
+	ct.TaskId = jct.TaskId
+	ct.ProjectId = jct.ProjectId
 	ct.CompletedDate = jct.CompletedDate
-	ct.Id = strconv.Itoa(jct.Id)
+	ct.Id = jct.Id
 
 	return nil
 }
