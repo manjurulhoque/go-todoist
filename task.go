@@ -295,3 +295,18 @@ func (c *Client) GetCompletedTask(id string) (*http.Response, *CompletedTask, er
 
 	return reponse, nil, fmt.Errorf("completed task: %s not found", id)
 }
+
+func (c *Client) ConvertCompletedTasksToTasks(completedTasks []CompletedTask) []Task {
+	var tasks []Task
+
+	for _, completedTask := range completedTasks {
+		tasks = append(tasks, Task{
+			Id:        completedTask.TaskId,
+			ProjectId: completedTask.ProjectId,
+			Content:   completedTask.Content,
+			Completed: true,
+		})
+	}
+
+	return tasks
+}
