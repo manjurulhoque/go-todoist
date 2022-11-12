@@ -14,7 +14,7 @@ type Task struct {
 	Id           string `json:"id"`
 	ProjectId    string `json:"project_id"`
 	Content      string `json:"content"`
-	Completed    bool   `json:"completed"`
+	IsCompleted  bool   `json:"is_completed"`
 	LabelIds     []int  `json:"label_ids"`
 	Order        int    `json:"order"`
 	Indent       int    `json:"indent"`
@@ -28,7 +28,7 @@ type jTask struct {
 	Id           string `json:"id"`
 	ProjectId    string `json:"project_id"`
 	Content      string `json:"content"`
-	Completed    bool   `json:"completed"`
+	IsCompleted  bool   `json:"is_completed"`
 	LabelIds     []int  `json:"label_ids"`
 	Order        int    `json:"order"`
 	Indent       int    `json:"indent"`
@@ -94,7 +94,7 @@ func (t *Task) UnmarshalJSON(b []byte) error {
 
 	t.ProjectId = jt.ProjectId
 	t.Content = jt.Content
-	t.Completed = jt.Completed
+	t.IsCompleted = jt.IsCompleted
 	t.LabelIds = jt.LabelIds
 	t.Order = jt.Order
 	t.Indent = jt.Indent
@@ -301,10 +301,10 @@ func (c *Client) ConvertCompletedTasksToTasks(completedTasks []CompletedTask) []
 
 	for _, completedTask := range completedTasks {
 		tasks = append(tasks, Task{
-			Id:        completedTask.TaskId,
-			ProjectId: completedTask.ProjectId,
-			Content:   completedTask.Content,
-			Completed: true,
+			Id:          completedTask.TaskId,
+			ProjectId:   completedTask.ProjectId,
+			Content:     completedTask.Content,
+			IsCompleted: true,
 		})
 	}
 
